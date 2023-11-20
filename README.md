@@ -1,70 +1,223 @@
-# Getting Started with Create React App
+# Auto-Image-Slider-Android
+Android auto image slide library. Compatible for Java and Kotlin,
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![](https://jitpack.io/v/dangiashish/Auto-Image-Slider.svg)](https://jitpack.io/#dangiashish/Auto-Image-Slider)
+[![](https://img.shields.io/badge/android--sdk-24%2B-green)](https://developer.android.com/tools/sdkmanager)
+[![](https://img.shields.io/badge/compatible-java-blue)](https://www.java.com/)
+[![](https://img.shields.io/badge/compatible-kotlin-blueviolet)](https://kotlinlang.org/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/cbda5b77-3ff3-479d-aae4-7e2d79f87567/deploy-status)](https://app.netlify.com/sites/androidimageslider/deploys)
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+<!-- https://github.com/dangiashish/Auto-Image-Slider/assets/70362030/86b9346d-441d-4124-8276-d35779f334ce 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Preview
+<img src="https://github.com/DangiAshish/Auto-Image-Slider/blob/8ce39ce03c180c2d4be72bff4f62993c8d18e6dc/preview.gif" alt="gif" style="width:400px; height:200px"/>-->
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+### Gradle
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Add repository in your `build.gradle` (project-level) file :
+```gradle
+allprojects {
+      repositories {
+	...
+	maven { url 'https://jitpack.io' }
+	}
+}
+```
+##### OR 
+in your `settings.gradle`
+ 
+```gradle
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+### Add dependency :
 
-### `npm run build`
+Add dependency in your `build.gradle` (module-level) file :
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```groovy
+dependencies{
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    implementation 'com.github.dangiashish:Auto-Image-Slider:1.0.4'
+}
+```
+### Code Snippets :
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### XML
+```groovy
+ <com.codebyashish.autoimageslider.AutoImageSlider
+        android:id="@+id/autoImageSlider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        app:ais_auto_sliding="true"
+        app:ais_corner_radius="10"
+        app:ais_indicator_align="@string/center"
+        app:ais_placeholder="@drawable/placeholder_default_loading"
+        app:ais_time_interval="5000"
+        app:ais_title_background="@drawable/text_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+ ```
 
-### `npm run eject`
+#### All Params
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```groovy
+app:ais_auto_sliding="true"  // Auto slide animation - true | false
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+app:ais_corner_radius="10"  // Widget Corner Radius - 0 | ....(n)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+app:ais_indicator_align="@string/center"  // Dots Indicator Alignment - { LEFT | CENTER | RIGHT }
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+app:ais_dots_visible="true" // Dots visibiliy - { true | false }
 
-## Learn More
+app:ais_time_interval="1000" // Slide interval in milliseconds
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+app:ais_slide_delay="2000"  // Sliding delay by 2 seconds
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+app:ais_placeholder="@drawable/placeholder.png" // any placeholder image untill real image load
 
-### Code Splitting
+app:ais_exception_image="@drawable/error.png" // any error or failure image if image could not load
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+app:ais_title_background="@drawable/custom_background.xml" // any custom drawable as text background
 
-### Analyzing the Bundle Size
+app:ais_text_align="LEFT" // text/title alignment - { LEFT | CENTER | RIGHT }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+app:ais_title_color="@color/white" // assign any color to title
+```
 
-### Making a Progressive Web App
+#### Kotlin
+```groovy
+class MainActivity : AppCompatActivity() , ItemsListener {
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    // declare a variable for ItemListener
+    private var listener : ItemsListener? = null
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        
+        // initialization of the listener
+        listener = this
+        
+        // create an imageArrayList which extend ImageSlideModel class
+        val autoImageList : ArrayList<ImageSlidesModel> = ArrayList()
+        
+        // find and initialize ImageSlider
+        val autoImageSlider = findViewById<AutoImageSlider>(R.id.autoImageSlider)
+        
+        // add some imagees or titles (text) inside the imagesArrayList
+        autoImageList.add(ImageSlidesModel("https://picsum.photos/id/237/200/300", "First image"))
+        autoImageList.add(ImageSlidesModel("https://picsum.photos/id/238/200/300", ""))
+        autoImageList.add(ImageSlidesModel("https://picsum.photos/id/239/200/300", "Third image"))
+        
+        // set the added images inside the AutoImageSlider
+        autoImageSlider.setImageList(autoImageList, ImageScaleType.FIT)
+        
+        // set any default animation or custom animation (setSlideAnimation(ImageAnimationTypes.ZOOM_IN))
+        autoImageSlider.setDefaultAnimation()
 
-### Advanced Configuration
+        // handle click event on item click
+        autoImageSlider.onItemClickListener(listener)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    }
 
-### Deployment
+    override fun onItemChanged(position: Int) {
+       // do what you want on item change event
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    override fun onTouched(actionTypes: ImageActionTypes?, position: Int) {
+       // do what you want on item touch event
+    }
 
-### `npm run build` fails to minify
+    override fun onItemClicked(position: Int) {
+       // do what you want on click event
+    }
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### Java
+```groovy
+public class MainActivity extends AppCompatActivity implements ItemsListener {
+
+    // declare a variable for ItemListener
+    private ItemsListener listener;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        // initialization of the listener
+        listener = this;
+
+        // create an imageArrayList which extend ImageSlideModel class
+        ArrayList<ImageSlidesModel> autoImageList = new ArrayList<>();
+        
+        // find and initialize ImageSlider
+        AutoImageSlider autoImageSlider = findViewById(R.id.autoImageSlider);
+        
+        // add some imagees or titles (text) inside the imagesArrayList
+        autoImageList.add(new ImageSlidesModel("https://picsum.photos/id/237/200/300", "First image"));
+        autoImageList.add(new ImageSlidesModel("https://picsum.photos/id/238/200/300", ""));
+        autoImageList.add(new ImageSlidesModel("https://picsum.photos/id/239/200/300", "Third image"));
+        
+        // set the added images inside the AutoImageSlider
+        autoImageSlider.setImageList(autoImageList, ImageScaleType.FIT);
+        
+        // set any default animation or custom animation (setSlideAnimation(ImageAnimationTypes.ZOOM_IN))
+        autoImageSlider.setDefaultAnimation();
+
+        // handle click event on item click
+        autoImageSlider.setOnItemClickListener(listener);
+    }
+
+    @Override
+    public void onItemChanged(int position) {
+        // Do what you want on item change event
+    }
+
+    @Override
+    public void onTouched(ImageActionTypes actionTypes, int position) {
+        // Do what you want on item touch event
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        // Do what you want on click event
+    }
+}
+```
+
+### Licence
+```
+MIT License
+
+Copyright (c) 2023 Ashish Dangi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
